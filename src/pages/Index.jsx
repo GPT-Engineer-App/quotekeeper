@@ -23,6 +23,7 @@ const categories = ["Motivation", "Life", "Happiness"];
 
 const Index = () => {
   const [quotes, setQuotes] = useState(initialQuotes);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [currentQuote, setCurrentQuote] = useState(null);
   const [view, setView] = useState("home"); // 'home', 'add', 'detail', 'edit'
   const [newQuote, setNewQuote] = useState({ text: "", author: "", category: "" });
@@ -98,14 +99,25 @@ const Index = () => {
           Add Quote
         </Button>
       </Flex>
-      <Flex>
-        <Input placeholder="Search quotes..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} mr={2} />
-        <IconButton icon={<FaSearch />} onClick={handleSearch} aria-label="Search Quotes" />
+      <Flex justifyContent="space-between" alignItems="center" mb={4}>
+        <Select placeholder="Filter by category" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} width="auto">
+          {categories.map((category, index) => (
+            <option key={index} value={category}>
+              {category}
+            </option>
+          ))}
+        </Select>
+        <Flex>
+          <Input placeholder="Search quotes..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} mr={2} />
+          <IconButton icon={<FaSearch />} onClick={handleSearch} aria-label="Search Quotes" />
+        </Flex>
       </Flex>
       <Stack spacing={4} width="100%">
-        {quotes.map((quote) => (
-          <QuoteCard key={quote.id} quote={quote} />
-        ))}
+        {quotes
+          .filter((quote) => !selectedCategory || quote.category === selectedCategory)
+          .map((quote) => (
+            <QuoteCard key={quote.id} quote={quote} />
+          ))}
       </Stack>
     </VStack>
   );
