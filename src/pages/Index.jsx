@@ -100,7 +100,19 @@ const Index = () => {
         </Button>
       </Flex>
       <Flex justifyContent="space-between" alignItems="center" mb={4}>
-        <Select placeholder="Filter by category" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} width="auto">
+        <Select
+          placeholder="Filter by category"
+          value={selectedCategory}
+          onChange={(e) => {
+            setSelectedCategory(e.target.value);
+            if (!e.target.value) {
+              setQuotes(initialQuotes);
+            } else {
+              setQuotes(quotes.filter((quote) => quote.category === e.target.value));
+            }
+          }}
+          width="auto"
+        >
           {categories.map((category, index) => (
             <option key={index} value={category}>
               {category}
